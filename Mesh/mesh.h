@@ -1,4 +1,4 @@
-
+#include<fstream>
 #include<iostream>
 #include<math.h>
 #include<ctime>
@@ -32,6 +32,9 @@ bool loop,simactive;
 int threadstatus;
 int type;
 int row,col;
+
+fstream file; 
+
 
 struct packet {
     int source_address_row, source_address_col;
@@ -82,7 +85,7 @@ class MeshNode {
 	int x,y;
 	int Routing_Algorithm(struct packet);
 	void Control_Logic();
-	void Acquire_Data_Packet(int,int);
+	void Acquire_Data_Packet(int,int,char[]);
 };
 
 
@@ -180,6 +183,9 @@ void MeshNode::Control_Logic()
 				                                cout<<"\nHops: "<<interfaces[currinterface].Receive_Register.nhops<<"\n";
                             
 cout<<"\nMesh "<<interfaces[currinterface].Receive_Register.source_address_row<<" "<<interfaces[currinterface].Receive_Register.source_address_col<<" "<<interfaces[currinterface].Receive_Register.dest_address_row<<" "<<interfaces[currinterface].Receive_Register.dest_address_col<<" "<<diff/(double)CLOCKS_PER_SEC<<" "<<interfaces[currinterface].Receive_Register.nhops<<"\n";
+file.open("result.txt",ios::app);
+file<<"\nMesh "<<interfaces[currinterface].Receive_Register.source_address_row<<" "<<interfaces[currinterface].Receive_Register.source_address_col<<" "<<interfaces[currinterface].Receive_Register.dest_address_row<<" "<<interfaces[currinterface].Receive_Register.dest_address_col<<" "<<diff/(double)CLOCKS_PER_SEC<<" "<<interfaces[currinterface].Receive_Register.nhops<<"\n";
+file.close();
 								interfaces[currinterface].Interface_Active=false;
 								interfaces[currinterface].Packet_In_Receive_Register=false;
 								loop=false;
@@ -239,8 +245,10 @@ int MeshNode::Routing_Algorithm(struct packet p)
 
 }
 
-void MeshNode::Acquire_Data_Packet(int a,int b)
+void MeshNode::Acquire_Data_Packet(int a,int b,char data[])
 {
+
+
 	struct packet p;
         p.source_address_row=x;
         p.source_address_col=y;
@@ -248,8 +256,7 @@ void MeshNode::Acquire_Data_Packet(int a,int b)
         cout<<"\nDestination "<<a<<","<<b<<"\n";
         p.dest_address_row=a;
         p.dest_address_col=b;
-        cout<<"\nEnter the data to be transmitted\n";
-        cin>>p.data;
+        strcpy(p.data,data);
 	clock_t start;
 	start=clock();
         p.start_timer=start;
@@ -261,6 +268,8 @@ void MeshNode::Acquire_Data_Packet(int a,int b)
 	interfaces[reqdInterface].Send_Register=p;
 	interfaces[reqdInterface].Packet_In_Send_Register=true;
 	loop=true;
+
+
 }
 
 
@@ -277,7 +286,7 @@ extern "C" void *call_func(void *f)
 {
    
 	struct args *curr=(struct args *)f;
-	//cout<<"\nStarting thread for "<<curr->a<<","<<curr->b<<"\n";
+	
 	MNode[curr->a-1][curr->b-1].Control_Logic();
 	return 0;
    

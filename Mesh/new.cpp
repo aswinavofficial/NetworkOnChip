@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream>
 #include<math.h>
 #include<ctime>
 #include<sys/time.h>
@@ -15,6 +16,7 @@ using namespace std;
 
 
 
+
 int main()
 {
     bool Left_Reqd,Left_Avail;
@@ -22,12 +24,17 @@ int main()
     bool Up_Reqd,Up_Avail;
     bool Down_Reqd,Down_Avail;
     int x,y;
+	file.open("result.txt",ios::app);
+    file<<"\nMESH TOPOLOGY SIMULATION\n\n\n";
     cout<<"\nMESH TOPOLOGY SIMULATION\n\n\n";
+
     cout<<"\nEnter Row Size : ";
     cin>>row;
     cout<<"\nEnter Column Size : ";
     cin>>col;
-    
+    file<<"Row Size : "<<row;
+	file<<"	Column Size : "<<col;
+    file.close();
 	
     pthread_t threads[row][col];
     threadstatus=READY;
@@ -128,7 +135,7 @@ int main()
                         threadstatus=INPROGRESS;
                         argtab->a=i+1;
                         argtab->b=j+1;
-                        //cout<<"\nInitiating "<<argtab->a<<","<<argtab->b<<"\n";
+                       
                         pthread_create(&threads[i][j],0,call_func,(void *)argtab);
                         for(int k=0;k<4;k++)
                         {
@@ -143,8 +150,90 @@ int main()
                     }
 
               int sr,sc,dr,dc;
+              int choice;
+              char  data[30];
 
-              cout<<"\nEnter Source Node Details : ";
+              cout<<"\n1. One Node to All ";
+			  cout<<"\n2. All Source to one Destination Node ";
+ 			  cout<<"\n3. One Source and One Destination ";
+			  cout<<"\n4. All source nodes to all Destination nodes "; 
+			  cout<<"\n   Enter Your Choice(1-4)";
+			  cin>>choice;
+
+              switch(choice)
+             {
+				case 1:
+              file.open("result.txt",ios::app);
+              
+			  cout<<"\nEnter Source Node Details : ";
+              cout<<"\nx : ";
+              cin>>sr;
+              cout<<"\ny : ";
+              cin>>sc;
+			 cout<<"\nEnter the data to be transmitted\n";
+             cin>>data;
+            file<<"\n\n\nOne Node to All \n\n";
+            file<<"Source Node "<<sr<<":"<<sc<<"\n";
+            file<<"Data : "<<data;
+            file.close();
+
+			 for(int i=0;i<row;i++)
+				{
+			for(int j=0;j<col;j++)
+				{
+            if(i!=sr| j!=sc)
+              {
+	     MNode[sr][sc].Acquire_Data_Packet(i,j,data);
+         while(loop);
+                }
+
+				}	
+				}
+
+				break;
+
+ 				case 2:
+			  cout<<"\nEnter Destination Details : ";
+              cout<<"\nx : ";
+              cin>>dr;
+              cout<<"\ny : ";
+              cin>>dc;
+			  cout<<"\nEnter the data to be transmitted\n";
+              cin>>data;
+			file.open("result.txt",ios::app);
+			file<<"\n\n\nAll Source to one Destination Node \n\n";
+            file<<"Destination Node "<<dr<<":"<<dc<<"\n";
+            file<<"Data : "<<data;
+            file.close();
+
+               for(int i=0;i<row;i++)
+				{
+			for(int j=0;j<col;j++)
+				{
+            if(i!=sr| j!=sc)
+              {
+	     MNode[i][j].Acquire_Data_Packet(dr,dc,data);
+         while(loop);
+                }
+
+				}	
+				}
+
+     
+
+               break;
+
+
+
+
+
+
+
+
+
+             }
+
+            /*  cout<<"\nEnter Source Node Details : ";
               cout<<"\nx : ";
               cin>>sr;
               cout<<"\ny : ";
@@ -155,13 +244,15 @@ int main()
               cout<<"\ny : ";
               cin>>dc;
 
-               MNode[sr][sc].Acquire_Data_Packet(dr,dc);
-               while(loop);
+         MNode[sr][sc].Acquire_Data_Packet(dr,dc);
+         while(loop); */
 		delete MNode;
 		delete list;
-            
-    
-	simactive=false;
+      simactive=false;
+
+
+
+
     return 0;   
 }
 
