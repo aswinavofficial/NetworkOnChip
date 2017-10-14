@@ -181,7 +181,7 @@ int main()
 				{
 			for(int j=0;j<col;j++)
 				{
-            if(i!=sr| j!=sc)
+            if(i!=sr|| j!=sc)
               {
 	     MNode[sr][sc].Acquire_Data_Packet(i,j,data);
          while(loop);
@@ -210,7 +210,7 @@ int main()
 				{
 			for(int j=0;j<col;j++)
 				{
-            if(i!=sr| j!=sc)
+            if(i!=dr|| j!=dc)
               {
 	     MNode[i][j].Acquire_Data_Packet(dr,dc,data);
          while(loop);
@@ -218,10 +218,47 @@ int main()
 
 				}	
 				}
+              break;
 
-     
 
-               break;
+			case 3:
+             cout<<"\nEnter Source Node Details : ";
+              cout<<"\nx : ";
+              cin>>sr;
+              cout<<"\ny : ";
+              cin>>sc;
+              cout<<"\nEnter Destination Details : ";
+              cout<<"\nx : ";
+              cin>>dr;
+              cout<<"\ny : ";
+              cin>>dc;
+
+			file.open("result.txt",ios::app);
+			file<<"\n\n\nOne Source to one Destination  \n\n";
+            file<<"Destination Node "<<dr<<":"<<dc<<"\n";
+            file<<"Data : "<<data;
+            file.close();
+
+         MNode[sr][sc].Acquire_Data_Packet(dr,dc,data);
+         while(loop);
+
+		break;
+
+       case 4 :
+
+           for(sr=0;sr<row;sr++)
+           for(sc=0;sc<col;sc++)
+		   for(dr=0;dr<row;dr++)
+		   for(dc=0;dc<col;dc++)
+            if(sr!=dr || sc!=dc ) {
+             MNode[sr][sc].Acquire_Data_Packet(dr,dc,data);
+            while(loop);
+
+            }
+          
+
+
+       break;
 
 
 
@@ -233,7 +270,7 @@ int main()
 
              }
 
-            /*  cout<<"\nEnter Source Node Details : ";
+            /*cout<<"\nEnter Source Node Details : ";
               cout<<"\nx : ";
               cin>>sr;
               cout<<"\ny : ";
