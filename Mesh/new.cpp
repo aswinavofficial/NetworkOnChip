@@ -14,6 +14,7 @@ using namespace std;
 
 
 
+int st,et;
 
 
 
@@ -192,8 +193,8 @@ int main()
 
 				break;
 
- 				case 2:
-			  cout<<"\nEnter Destination Details : ";
+ 	 case 2:
+               cout<<"\nEnter Destination Details : ";
               cout<<"\nx : ";
               cin>>dr;
               cout<<"\ny : ";
@@ -221,7 +222,7 @@ int main()
               break;
 
 
-			case 3:
+case 3:
              cout<<"\nEnter Source Node Details : ";
               cout<<"\nx : ";
               cin>>sr;
@@ -245,7 +246,7 @@ int main()
 
 		break;
 
-       case 4 :
+     case 4 :
             cout<<"\nEnter the data to be transmitted\n";
             cin>>data;
 
@@ -255,6 +256,10 @@ int main()
             
             file<<"Data : "<<data;
             file.close();
+
+            clock_t timet;
+            timet=clock();
+            st=timet;
            for(sr=0;sr<row;sr++)
            for(sc=0;sc<col;sc++)
 		   for(dr=0;dr<row;dr++)
@@ -266,7 +271,16 @@ int main()
             }
           
 
-
+       timet=clock();
+       et=timet;
+       int tt=et-st;
+       int res=tt/(double)CLOCKS_PER_SEC;
+       double min=(double)res/60;
+       cout<<"\n\nSimulation Time : "<<min<<" Minutes";
+        file.open("result.txt",ios::app);
+        file<<"\n\nSimulation Time : "<<min<<" Minutes";
+        file.close();
+       
        break;
 
 
