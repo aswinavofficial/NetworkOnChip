@@ -232,7 +232,8 @@ int main()
               cin>>dr;
               cout<<"\ny : ";
               cin>>dc;
-
+              cout<<"\nEnter the data to be transmitted\n";
+              cin>>data;
 			file.open("result.txt",ios::app);
 			file<<"\n\n\nOne Source to one Destination  \n\n";
             file<<"Destination Node "<<dr<<":"<<dc<<"\n";
