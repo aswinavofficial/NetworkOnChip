@@ -246,7 +246,15 @@ int main()
 		break;
 
        case 4 :
+            cout<<"\nEnter the data to be transmitted\n";
+            cin>>data;
 
+
+           file.open("result.txt",ios::app);
+			file<<"\n\n\nAll Source to All Destination  \n\n";
+            
+            file<<"Data : "<<data;
+            file.close();
            for(sr=0;sr<row;sr++)
            for(sc=0;sc<col;sc++)
 		   for(dr=0;dr<row;dr++)
